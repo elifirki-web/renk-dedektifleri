@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas Library for screenshot images -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- html2pdf Library for direct PDF exports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -83,7 +85,7 @@
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-black tracking-wider uppercase mb-2 shadow">
-                        <i class="fa-solid fa-magnifying-glass"></i> BILFEN DİJİTAL ETKİNLİK KARTI
+                        <i class="fa-solid fa-magnifying-glass"></i> BİLFEN DİJİTAL ETKİNLİK KARTI
                     </div>
                     <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white flex items-center gap-2">
                         RENK DEDEKTİFLERİ
@@ -95,7 +97,7 @@
                 <!-- Bilfen Watermark Badge -->
                 <div class="flex items-center gap-3 self-end sm:self-center">
                     <div class="text-right">
-                        <span class="block text-xl font-black tracking-widest text-amber-400">BILFEN</span>
+                        <span class="block text-xl font-black tracking-widest text-amber-400">BİLFEN</span>
                         <span class="block text-[10px] text-indigo-300 font-semibold uppercase tracking-wider">Eğitim Kurumları</span>
                     </div>
                 </div>
@@ -120,7 +122,7 @@
                     <label for="object-name" class="block text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1.5 flex items-center gap-1.5">
                         <i class="fa-solid fa-cube text-indigo-600"></i> İncelediğim Nesne:
                     </label>
-                    <input type="text" id="object-name" placeholder="Örn: Sarı Lego Parçası" class="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200 bg-white text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition" oninput="updateSimulatedObjectText(this.value)">
+                    <input type="text" id="object-name" value="Sarı Lego Parçası" placeholder="Örn: Sarı Lego Parçası" class="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200 bg-white text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition" oninput="updateSimulatedObjectText(this.value)">
                 </div>
                 <div>
                     <label for="activity-date" class="block text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1.5 flex items-center gap-1.5">
@@ -174,14 +176,14 @@
                     <!-- Lego Brick Preset Buttons Container -->
                     <div class="flex flex-wrap items-center gap-2 bg-indigo-900/60 p-1.5 rounded-xl border border-indigo-700/50" id="lego-preset-container">
                         <span class="text-xs font-semibold text-indigo-200 px-1">Lego Seç:</span>
-                        <button onclick="selectSimObject('yellow_lego')" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Sarı Lego Parçası">
-                            <span class="w-3 h-3 rounded-sm bg-amber-400 inline-block shadow"></span> Sarı
+                        <button onclick="selectSimObject('yellow_lego')" id="preset-btn-yellow_lego" class="px-2.5 py-1 text-xs rounded-lg bg-amber-500 text-slate-950 font-bold border border-amber-300 shadow transition flex items-center gap-1.5" title="Sarı Lego Parçası">
+                            <span class="w-3 h-3 rounded-sm bg-amber-400 inline-block border border-slate-700"></span> Sarı
                         </button>
-                        <button onclick="selectSimObject('red_lego')" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Kırmızı Lego Parçası">
-                            <span class="w-3 h-3 rounded-sm bg-red-500 inline-block shadow"></span> Kırmızı
+                        <button onclick="selectSimObject('red_lego')" id="preset-btn-red_lego" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Kırmızı Lego Parçası">
+                            <span class="w-3 h-3 rounded-sm bg-red-500 inline-block border border-slate-700"></span> Kırmızı
                         </button>
-                        <button onclick="selectSimObject('blue_lego')" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Mavi Lego Parçası">
-                            <span class="w-3 h-3 rounded-sm bg-blue-500 inline-block shadow"></span> Mavi
+                        <button onclick="selectSimObject('blue_lego')" id="preset-btn-blue_lego" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Mavi Lego Parçası">
+                            <span class="w-3 h-3 rounded-sm bg-blue-500 inline-block border border-slate-700"></span> Mavi
                         </button>
                     </div>
                 </div>
@@ -190,7 +192,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                     <!-- Visual Stage Container -->
                     <div class="lg:col-span-7 flex flex-col items-center">
-                        <div id="light-stage" class="w-full h-60 md:h-72 rounded-2xl bg-slate-200 relative overflow-hidden flex items-center justify-center border-4 border-indigo-800/80 shadow-2xl transition-all">
+                        <div id="light-stage" class="w-full h-64 md:h-72 rounded-2xl bg-slate-200 relative overflow-hidden flex items-center justify-center border-4 border-indigo-800/80 shadow-2xl transition-all">
                             
                             <!-- Light Beam Layer -->
                             <div id="beam-layer" class="absolute inset-0 pointer-events-none transition-all duration-300"></div>
@@ -199,18 +201,22 @@
                             <div id="filter-overlay-layer" class="absolute inset-0 pointer-events-none transition-all duration-300"></div>
 
                             <!-- Stage Object Graphics -->
-                            <div id="stage-object-container" class="relative z-10 flex flex-col items-center justify-center p-6 text-center">
+                            <div id="stage-object-container" class="relative z-10 flex flex-col items-center justify-center p-4 text-center">
                                 <div id="stage-object" class="transform transition duration-500 flex items-center justify-center">
-                                    <!-- Dynamic SVG standard Lego rendering -->
+                                    <!-- Dynamic SVG standard Lego rendering will appear here -->
                                 </div>
-                                <span id="sim-object-label" class="mt-3 px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-white backdrop-blur border border-white/20">
+                                <span id="sim-object-label" class="mt-3 px-3.5 py-1 rounded-full text-xs font-bold bg-slate-900/80 text-white backdrop-blur border border-white/20 shadow">
                                     Sarı Lego Parçası
                                 </span>
+                                <!-- Perceived Color Badge -->
+                                <div id="perceived-color-badge" class="mt-2 px-3 py-1 rounded-md text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md transition-all">
+                                    Görünüm: Doğal Sarı
+                                </div>
                             </div>
 
                             <!-- Current Mode Badge -->
                             <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30 font-semibold flex items-center gap-1.5 shadow">
-                                <i id="mode-icon" class="fa-solid fa-sun"></i>
+                                <i id="mode-icon" class="fa-solid fa-sun text-amber-500"></i>
                                 <span id="mode-label">Normal Sınıf Işığı</span>
                             </div>
                         </div>
@@ -224,15 +230,15 @@
                                 1. Işık Kaynağını Seç
                             </label>
                             <div class="grid grid-cols-3 gap-2">
-                                <button onclick="setSimMode('normal')" id="btn-mode-normal" class="p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md">
+                                <button onclick="setSimMode('normal')" id="btn-mode-normal" class="p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md border-2 border-amber-300">
                                     <i class="fa-solid fa-sun text-sm"></i>
                                     <span>Normal Işık</span>
                                 </button>
-                                <button onclick="setSimMode('white')" id="btn-mode-white" class="p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800">
+                                <button onclick="setSimMode('white')" id="btn-mode-white" class="p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800">
                                     <i class="fa-solid fa-flashlight text-sm"></i>
                                     <span>Beyaz Fener</span>
                                 </button>
-                                <button onclick="setSimMode('colored')" id="btn-mode-colored" class="p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800">
+                                <button onclick="setSimMode('colored')" id="btn-mode-colored" class="p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800">
                                     <i class="fa-solid fa-filter text-sm"></i>
                                     <span>Renkli Asetat</span>
                                 </button>
@@ -244,18 +250,12 @@
                             <label class="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
                                 2. Asetat Filtre Rengi
                             </label>
-                            <div class="grid grid-cols-4 gap-2">
+                            <div class="grid grid-cols-2 gap-2">
                                 <button onclick="setAcetateColor('red')" id="btn-filter-red" class="p-2 rounded-lg text-xs font-bold border-2 border-red-500 bg-red-600/30 text-white transition flex flex-col items-center justify-center gap-1">
                                     <span class="w-3 h-3 rounded-full bg-red-500"></span> Kırmızı
                                 </button>
                                 <button onclick="setAcetateColor('blue')" id="btn-filter-blue" class="p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1">
                                     <span class="w-3 h-3 rounded-full bg-blue-500"></span> Mavi
-                                </button>
-                                <button onclick="setAcetateColor('green')" id="btn-filter-green" class="p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1">
-                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Yeşil
-                                </button>
-                                <button onclick="setAcetateColor('yellow')" id="btn-filter-yellow" class="p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1">
-                                    <span class="w-3 h-3 rounded-full bg-amber-400"></span> Sarı
                                 </button>
                             </div>
                         </div>
@@ -269,16 +269,16 @@
                     <span class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
                         <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Hızlı Yanıt Etiketleri (Gözlem Kutusuna Ekle)
                     </span>
-                    <span class="text-[11px] text-indigo-600 font-medium">Odaklandığın metin kutusuna doğrudan ekler</span>
+                    <span class="text-[11px] text-indigo-600 font-medium">Son seçtiğin metin kutusuna doğrudan ekler</span>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="insertQuickTag('Sarı görünüyor')" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-semibold rounded-lg border border-amber-300 transition">🟡 Sarı</button>
                     <button onclick="insertQuickTag('Kırmızı görünüyor')" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-900 text-xs font-semibold rounded-lg border border-red-300 transition">🔴 Kırmızı</button>
                     <button onclick="insertQuickTag('Mavi görünüyor')" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-900 text-xs font-semibold rounded-lg border border-blue-300 transition">🔵 Mavi</button>
-                    <button onclick="insertQuickTag('Yeşil/Koyu görünüyor')" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-semibold rounded-lg border border-emerald-300 transition">🟢 Yeşil/Koyu</button>
-                    <button onclick="insertQuickTag('Siyah / Gölgede kaldı')" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-lg border border-slate-400 transition">⬛ Siyah / Koyu</button>
+                    <button onclick="insertQuickTag('Koyu / Siyah görünüyor')" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-lg border border-slate-400 transition">⬛ Siyah / Koyu</button>
+                    <button onclick="insertQuickTag('Rengi canlı parlak oldu')" class="px-2.5 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-900 text-xs font-semibold rounded-lg border border-yellow-300 transition">✨ Canlı Parlak</button>
                     <button onclick="insertQuickTag('Rengi aynı kaldı')" class="px-2.5 py-1 bg-teal-100 hover:bg-teal-200 text-teal-900 text-xs font-semibold rounded-lg border border-teal-300 transition">✅ Rengi Aynı Kaldı</button>
-                    <button onclick="insertQuickTag('Rengi farklılaştı')" class="px-2.5 py-1 bg-purple-100 hover:bg-purple-200 text-purple-900 text-xs font-semibold rounded-lg border border-purple-300 transition">🔄 Rengi Farklılaştı</button>
+                    <button onclick="insertQuickTag('Rengi koyulaştı / değişti')" class="px-2.5 py-1 bg-purple-100 hover:bg-purple-200 text-purple-900 text-xs font-semibold rounded-lg border border-purple-300 transition">🔄 Rengi Farklılaştı</button>
                 </div>
             </div>
 
@@ -454,30 +454,36 @@
                     </span>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                     <button onclick="clearForm()" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100 transition flex items-center gap-2">
                         <i class="fa-solid fa-trash-can"></i> Temizle
                     </button>
-                    <button onclick="openCompletionBadgeModal()" class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-md">
+                    <button onclick="openCompletionBadgeModal()" class="px-3.5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-md">
                         <i class="fa-solid fa-award text-base"></i> Rozet Al
                     </button>
                     
-                    <!-- Direct PDF Download Button -->
-                    <button id="btn-download-pdf" onclick="downloadPDF()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-2 shadow-md">
-                        <i class="fa-solid fa-file-pdf text-base"></i> PDF İndir
+                    <!-- Direct PNG Image / SS Export Button -->
+                    <button id="btn-download-image" onclick="downloadImageSS()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition flex items-center gap-2 shadow-md" title="Ekran görüntüsü / Resim dosyası olarak kaydet">
+                        <i class="fa-solid fa-camera text-base"></i> Resim / SS İndir
                     </button>
-                    
+
                     <!-- Print Fallback Button -->
-                    <button onclick="window.print()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center gap-2 shadow-md">
+                    <button onclick="window.print()" class="px-3.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center gap-2 shadow-md">
                         <i class="fa-solid fa-print"></i> Yazdır
                     </button>
                 </div>
+            </div>
+
+            <!-- Mobile / Image Helper Tip -->
+            <div class="no-print mt-3 text-center text-[11px] text-slate-500 font-medium">
+                <i class="fa-solid fa-lightbulb text-amber-500"></i> 
+                <span>Çalışmanızı kaydetmek için <strong>"Resim / SS İndir"</strong> butonunu kullanarak tüm detayları görsel olarak indirebilirsiniz.</span>
             </div>
         </main>
 
         <!-- Footer -->
         <footer class="bg-slate-100 p-4 text-center border-t border-slate-200 text-xs text-slate-500 font-medium">
-            Tamamladığın kartı kaydet ve öğretmeninin yönergesine göre teslim et. | <strong class="text-slate-700">BILFEN EĞİTİM KURUMLARI</strong>
+            Tamamladığın kartı kaydet ve öğretmeninin yönergesine göre teslim et. | <strong class="text-slate-700">BİLFEN EĞİTİM KURUMLARI</strong>
         </footer>
     </div>
 
@@ -547,31 +553,62 @@
         // Dynamic 3D Lego Brick SVG Graphic Generator
         function getLegoSvg(colorHex) {
             return `
-                <svg width="140" height="110" viewBox="0 0 130 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl transition-all duration-300">
-                    <!-- Shadow Base -->
-                    <rect x="15" y="42" width="100" height="50" rx="8" fill="black" fill-opacity="0.25" />
-                    <!-- Brick Main Body -->
-                    <rect x="15" y="38" width="100" height="50" rx="8" fill="${colorHex}" />
-                    <!-- Top Highlight Strip -->
-                    <rect x="17" y="40" width="96" height="6" rx="3" fill="white" fill-opacity="0.35" />
+                <svg width="180" height="130" viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl transition-all duration-300 pointer-events-none">
+                    <!-- Drop Shadow -->
+                    <rect x="15" y="45" width="110" height="48" rx="8" fill="#000000" fill-opacity="0.35" />
+                    <!-- Main Brick Body -->
+                    <rect x="15" y="38" width="110" height="50" rx="8" fill="${colorHex}" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                    <!-- Top Highlight Line -->
+                    <rect x="18" y="40" width="104" height="5" rx="2.5" fill="#FFFFFF" fill-opacity="0.4" />
+                    <!-- Bottom Shadow Strip -->
+                    <rect x="15" y="80" width="110" height="8" rx="4" fill="#000000" fill-opacity="0.25" />
                     
                     <!-- Left Stud -->
-                    <rect x="28" y="22" width="32" height="18" rx="4" fill="${colorHex}" />
-                    <ellipse cx="44" cy="24" rx="14" ry="4" fill="white" fill-opacity="0.4" />
-                    <rect x="28" y="36" width="32" height="4" fill="black" fill-opacity="0.2" />
+                    <rect x="28" y="20" width="36" height="20" rx="5" fill="${colorHex}" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                    <ellipse cx="46" cy="23" rx="15" ry="4" fill="#FFFFFF" fill-opacity="0.45" />
+                    <rect x="28" y="36" width="36" height="4" fill="#000000" fill-opacity="0.2" />
                     
                     <!-- Right Stud -->
-                    <rect x="70" y="22" width="32" height="18" rx="4" fill="${colorHex}" />
-                    <ellipse cx="86" cy="24" rx="14" ry="4" fill="white" fill-opacity="0.4" />
-                    <rect x="70" y="36" width="32" height="4" fill="black" fill-opacity="0.2" />
+                    <rect x="76" y="20" width="36" height="20" rx="5" fill="${colorHex}" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                    <ellipse cx="94" cy="23" rx="15" ry="4" fill="#FFFFFF" fill-opacity="0.45" />
+                    <rect x="76" y="36" width="36" height="4" fill="#000000" fill-opacity="0.2" />
                 </svg>
             `;
         }
 
+        // Lego base colors registry
         const simObjects = {
             yellow_lego: { label: 'Sarı Lego Parçası', color: '#F59E0B' },
             red_lego: { label: 'Kırmızı Lego Parçası', color: '#EF4444' },
             blue_lego: { label: 'Mavi Lego Parçası', color: '#3B82F6' }
+        };
+
+        // Light physics calculation engine (Legos darken realistic tones of their main color)
+        const colorPhysicsMap = {
+            'yellow_lego': {
+                'normal': { color: '#F59E0B', label: 'Görünüm: Doğal Sarı', scale: 1, filter: 'none' },
+                'white': { color: '#FCD34D', label: 'Görünüm: Canlı Parlak Sarı', scale: 1.05, filter: 'brightness(1.35) drop-shadow(0 0 15px rgba(255,255,255,0.9))' },
+                'red_filter': { color: '#D97706', label: 'Görünüm: Koyu Kehribar Sarısı', scale: 0.98, filter: 'brightness(0.85) contrast(1.1)' },
+                'blue_filter': { color: '#A16207', label: 'Görünüm: Koyu Gölgeli Sarı', scale: 0.95, filter: 'brightness(0.75) contrast(1.2)' },
+                'green_filter': { color: '#B45309', label: 'Görünüm: Koyu Hardal Sarısı', scale: 0.98, filter: 'brightness(0.8)' },
+                'yellow_filter': { color: '#FBBF24', label: 'Görünüm: Parlak Altın Sarısı', scale: 1.02, filter: 'brightness(1.15)' }
+            },
+            'red_lego': {
+                'normal': { color: '#EF4444', label: 'Görünüm: Doğal Kırmızı', scale: 1, filter: 'none' },
+                'white': { color: '#F87171', label: 'Görünüm: Canlı Parlak Kırmızı', scale: 1.05, filter: 'brightness(1.35) drop-shadow(0 0 15px rgba(255,255,255,0.9))' },
+                'red_filter': { color: '#DC2626', label: 'Görünüm: Işıldayan Canlı Kırmızı', scale: 1.02, filter: 'brightness(1.2)' },
+                'blue_filter': { color: '#991B1B', label: 'Görünüm: Koyu Bordo Kırmızı', scale: 0.95, filter: 'brightness(0.75) contrast(1.2)' },
+                'green_filter': { color: '#7F1D1D', label: 'Görünüm: Koyu Gölgeli Kırmızı', scale: 0.95, filter: 'brightness(0.7)' },
+                'yellow_filter': { color: '#C2410C', label: 'Görünüm: Koyu Kiremit Kırmızısı', scale: 0.98, filter: 'brightness(0.85)' }
+            },
+            'blue_lego': {
+                'normal': { color: '#3B82F6', label: 'Görünüm: Doğal Mavi', scale: 1, filter: 'none' },
+                'white': { color: '#60A5FA', label: 'Görünüm: Canlı Parlak Mavi', scale: 1.05, filter: 'brightness(1.35) drop-shadow(0 0 15px rgba(255,255,255,0.9))' },
+                'red_filter': { color: '#1E3A8A', label: 'Görünüm: Koyu Lacivert Mavi', scale: 0.95, filter: 'brightness(0.75) contrast(1.2)' },
+                'blue_filter': { color: '#2563EB', label: 'Görünüm: Işıldayan Derin Mavi', scale: 1.02, filter: 'brightness(1.2)' },
+                'green_filter': { color: '#1D4ED8', label: 'Görünüm: Koyu Gölgeli Mavi', scale: 0.98, filter: 'brightness(0.8)' },
+                'yellow_filter': { color: '#1E40AF', label: 'Görünüm: Koyu Gece Mavisi', scale: 0.95, filter: 'brightness(0.75)' }
+            }
         };
 
         const formFields = [
@@ -581,156 +618,80 @@
             'proof-normal', 'proof-colored', 'explanation'
         ];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Track focused text inputs for quick tags
-            document.querySelectorAll('input[type="text"], textarea').forEach(input => {
-                input.addEventListener('focus', () => {
-                    lastFocusedInput = input;
-                });
-            });
-
-            // Set default date to today safely
-            const dateInput = document.getElementById('activity-date');
-            if (dateInput && !dateInput.value) {
-                dateInput.value = new Date().toISOString().split('T')[0];
-            }
-
-            // Load saved form data
-            loadFormData();
-
-            // Attach auto-save listeners safely
-            formFields.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', autoSave);
-                }
-            });
-
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', autoSave);
-            });
-
-            // Initialize default Lego object
-            selectSimObject('yellow_lego');
-        });
-
-        function selectSimObject(objKey) {
-            if (simObjects[objKey]) {
-                currentSimObject = objKey;
-                const stageObj = document.getElementById('stage-object');
-                const label = document.getElementById('sim-object-label');
-                
-                if (stageObj) stageObj.innerHTML = getLegoSvg(simObjects[objKey].color);
-                if (label) label.textContent = simObjects[objKey].label;
-
-                const objectInput = document.getElementById('object-name');
-                if (objectInput && (!objectInput.value || objectInput.value.includes('Lego'))) {
-                    objectInput.value = simObjects[objKey].label;
-                    autoSave();
-                }
-                updateSimStage();
-            }
-        }
-
-        function updateSimulatedObjectText(val) {
-            const label = document.getElementById('sim-object-label');
-            if (label) {
-                if (val && val.trim() !== '') {
-                    label.textContent = val;
-                } else if (simObjects[currentSimObject]) {
-                    label.textContent = simObjects[currentSimObject].label;
-                }
-            }
-        }
-
-        function setSimMode(mode) {
-            currentMode = mode;
-            
-            // Toggle Light Mode Buttons Styling
-            const btnNormal = document.getElementById('btn-mode-normal');
-            const btnWhite = document.getElementById('btn-mode-white');
-            const btnColored = document.getElementById('btn-mode-colored');
-
-            [btnNormal, btnWhite, btnColored].forEach(btn => {
-                if (btn) {
-                    btn.className = 'p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800';
-                }
-            });
-
-            const activeBtn = mode === 'normal' ? btnNormal : (mode === 'white' ? btnWhite : btnColored);
-            if (activeBtn) {
-                activeBtn.className = 'p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md';
-            }
-
-            // Acetate control panel visibility animation
-            const acetateControls = document.getElementById('acetate-controls');
-            if (acetateControls) {
-                if (mode === 'colored') {
-                    acetateControls.classList.remove('opacity-40', 'pointer-events-none');
-                } else {
-                    acetateControls.classList.add('opacity-40', 'pointer-events-none');
-                }
-            }
-
-            updateSimStage();
-        }
-
-        function setAcetateColor(color) {
-            currentAcetateColor = color;
-            const filterBtns = {
-                red: document.getElementById('btn-filter-red'),
-                blue: document.getElementById('btn-filter-blue'),
-                green: document.getElementById('btn-filter-green'),
-                yellow: document.getElementById('btn-filter-yellow')
-            };
-
-            Object.keys(filterBtns).forEach(k => {
-                if (filterBtns[k]) {
-                    filterBtns[k].className = 'p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1';
-                }
-            });
-
-            if (filterBtns[color]) {
-                const borderColors = { red: 'border-red-500 bg-red-600/30 text-white', blue: 'border-blue-500 bg-blue-600/30 text-white', green: 'border-emerald-500 bg-emerald-600/30 text-white', yellow: 'border-amber-400 bg-amber-500/30 text-white' };
-                filterBtns[color].className = `p-2 rounded-lg text-xs font-bold border-2 ${borderColors[color]} transition flex flex-col items-center justify-center gap-1`;
-            }
-
-            if (currentMode === 'colored') {
-                updateSimStage();
-            }
-        }
-
         function updateSimStage() {
             const stage = document.getElementById('light-stage');
             const beamLayer = document.getElementById('beam-layer');
             const filterOverlay = document.getElementById('filter-overlay-layer');
             const modeIcon = document.getElementById('mode-icon');
             const modeLabel = document.getElementById('mode-label');
+            const stageObj = document.getElementById('stage-object');
+            const colorBadge = document.getElementById('perceived-color-badge');
+            const objLabel = document.getElementById('sim-object-label');
 
             if (!stage || !beamLayer || !filterOverlay) return;
 
-            // Base Stage background
+            // Determine physics lookup key
+            let lightKey = currentMode;
+            if (currentMode === 'colored') {
+                lightKey = currentAcetateColor + '_filter';
+            }
+
+            // Retrieve object physics data
+            const currentObjMap = colorPhysicsMap[currentSimObject] || {
+                normal: { color: simObjects[currentSimObject]?.color || '#F59E0B', label: 'Görünüm: Doğal Renk', scale: 1, filter: 'none' },
+                white: { color: simObjects[currentSimObject]?.color || '#F59E0B', label: 'Görünüm: Parlak Işıklı', scale: 1.05, filter: 'brightness(1.3)' },
+                red_filter: { color: '#7f1d1d', label: 'Görünüm: Koyu Filtreli', scale: 0.95, filter: 'brightness(0.5)' },
+                blue_filter: { color: '#0f172a', label: 'Görünüm: Siyahımsı Koyu', scale: 0.95, filter: 'brightness(0.3)' },
+                green_filter: { color: '#14532d', label: 'Görünüm: Koyu Yeşilimsi', scale: 0.95, filter: 'brightness(0.4)' },
+                yellow_filter: { color: '#78350f', label: 'Görünüm: Koyu Sarımsı', scale: 0.98, filter: 'brightness(0.7)' }
+            };
+
+            const physData = currentObjMap[lightKey] || currentObjMap['normal'];
+
+            // Update Label
+            if (objLabel) {
+                objLabel.textContent = simObjects[currentSimObject]?.label || 'Lego Parçası';
+            }
+
+            // Render Lego SVG
+            if (stageObj) {
+                stageObj.innerHTML = getLegoSvg(physData.color);
+                stageObj.style.filter = physData.filter;
+                stageObj.style.transform = `scale(${physData.scale})`;
+            }
+
+            // Update Perceived Color Badge Text
+            if (colorBadge) {
+                colorBadge.textContent = physData.label;
+                if (lightKey === 'white' || lightKey === 'normal' || lightKey === 'yellow_filter') {
+                    colorBadge.className = 'mt-2 px-3 py-1 rounded-md text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md transition-all';
+                } else if (physData.label.includes('Siyah')) {
+                    colorBadge.className = 'mt-2 px-3 py-1 rounded-md text-xs font-extrabold bg-slate-900 text-amber-300 border border-amber-500/50 shadow-md transition-all';
+                } else {
+                    colorBadge.className = 'mt-2 px-3 py-1 rounded-md text-xs font-extrabold bg-indigo-900 text-white shadow-md transition-all';
+                }
+            }
+
+            // Stage Background Lighting
             if (currentMode === 'normal') {
-                stage.style.backgroundColor = '#e2e8f0'; // bright classroom
+                stage.style.backgroundColor = '#e2e8f0';
                 beamLayer.style.background = 'transparent';
                 filterOverlay.style.background = 'transparent';
                 if (modeIcon) modeIcon.className = 'fa-solid fa-sun text-amber-500';
                 if (modeLabel) modeLabel.textContent = 'Normal Sınıf Işığı';
             } else if (currentMode === 'white') {
-                stage.style.backgroundColor = '#090d16'; // dark room
+                stage.style.backgroundColor = '#090d16';
                 beamLayer.style.background = 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.2) 50%, transparent 80%)';
                 filterOverlay.style.background = 'transparent';
                 if (modeIcon) modeIcon.className = 'fa-solid fa-flashlight text-amber-300';
-                if (modeLabel) modeLabel.textContent = 'Beyaz Fener Işığı';
+                if (modeLabel) modeLabel.textContent = 'Beyaz Fener Işığı (Canlı)';
             } else if (currentMode === 'colored') {
-                stage.style.backgroundColor = '#090d16'; // dark room with filter beam
+                stage.style.backgroundColor = '#090d16';
                 const filterColors = {
                     red: 'rgba(239, 68, 68, 0.65)',
-                    blue: 'rgba(59, 130, 246, 0.65)',
-                    green: 'rgba(16, 185, 129, 0.65)',
-                    yellow: 'rgba(245, 158, 11, 0.65)'
+                    blue: 'rgba(59, 130, 246, 0.65)'
                 };
-                const filterNames = { red: 'Kırmızı', blue: 'Mavi', green: 'Yeşil', yellow: 'Sarı' };
+                const filterNames = { red: 'Kırmızı', blue: 'Mavi' };
                 beamLayer.style.background = `radial-gradient(circle, ${filterColors[currentAcetateColor]} 0%, rgba(255,255,255,0.15) 55%, transparent 80%)`;
                 filterOverlay.style.background = filterColors[currentAcetateColor];
                 filterOverlay.style.mixBlendMode = 'overlay';
@@ -739,122 +700,116 @@
             }
         }
 
-        function autoSave() {
-            const data = {};
-            formFields.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) data[id] = el.value;
-            });
+        function selectSimObject(objKey) {
+            currentSimObject = objKey;
 
-            ['comp-normal', 'comp-white', 'comp-colored'].forEach(name => {
-                const checked = document.querySelector(`input[name="${name}"]:checked`);
-                if (checked) data[name] = checked.value;
-            });
-
-            try {
-                localStorage.setItem('renk_dedektifleri_data', JSON.stringify(data));
-                const saveStatus = document.getElementById('save-status');
-                if (saveStatus) {
-                    saveStatus.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> Otomatik Kaydedildi';
+            // Highlight chosen preset button
+            Object.keys(simObjects).forEach(key => {
+                const btn = document.getElementById(`preset-btn-${key}`);
+                if (btn) {
+                    if (key === objKey) {
+                        btn.className = 'px-2.5 py-1 text-xs rounded-lg bg-amber-500 text-slate-950 font-bold border border-amber-300 shadow transition flex items-center gap-1.5';
+                    } else {
+                        btn.className = 'px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5';
+                    }
                 }
-            } catch (e) {
-                console.error("Local storage error:", e);
+            });
+
+            const objInput = document.getElementById('object-name');
+            if (objInput && simObjects[objKey]) {
+                objInput.value = simObjects[objKey].label;
             }
+
+            updateSimStage();
+            saveFormData();
         }
 
-        function loadFormData() {
-            try {
-                const saved = localStorage.getItem('renk_dedektifleri_data');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    formFields.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el && data[id] !== undefined) el.value = data[id];
-                    });
+        function setSimMode(mode) {
+            currentMode = mode;
 
-                    ['comp-normal', 'comp-white', 'comp-colored'].forEach(name => {
-                        if (data[name]) {
-                            const radio = document.querySelector(`input[name="${name}"][value="${data[name]}"]`);
-                            if (radio) radio.checked = true;
-                        }
-                    });
-                }
-            } catch (e) {
-                console.error("Failed to load saved data:", e);
+            const btnNormal = document.getElementById('btn-mode-normal');
+            const btnWhite = document.getElementById('btn-mode-white');
+            const btnColored = document.getElementById('btn-mode-colored');
+            const acetateBox = document.getElementById('acetate-controls');
+
+            [btnNormal, btnWhite, btnColored].forEach(btn => {
+                if (btn) btn.className = 'p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800';
+            });
+
+            if (mode === 'normal' && btnNormal) {
+                btnNormal.className = 'p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md border-2 border-amber-300';
+            } else if (mode === 'white' && btnWhite) {
+                btnWhite.className = 'p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md border-2 border-amber-300';
+            } else if (mode === 'colored' && btnColored) {
+                btnColored.className = 'p-2.5 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md border-2 border-amber-300';
             }
+
+            if (acetateBox) {
+                if (mode === 'colored') {
+                    acetateBox.classList.remove('opacity-40', 'pointer-events-none');
+                } else {
+                    acetateBox.classList.add('opacity-40', 'pointer-events-none');
+                }
+            }
+
+            updateSimStage();
         }
 
-        function clearForm() {
-            formFields.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = '';
+        function setAcetateColor(color) {
+            currentAcetateColor = color;
+            ['red', 'blue'].forEach(c => {
+                const btn = document.getElementById(`btn-filter-${c}`);
+                if (btn) {
+                    if (c === color) {
+                        btn.className = `p-2 rounded-lg text-xs font-bold border-2 border-amber-300 bg-amber-500 text-slate-950 shadow transition flex flex-col items-center justify-center gap-1`;
+                    } else {
+                        btn.className = `p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1`;
+                    }
+                }
             });
-            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-            try {
-                localStorage.removeItem('renk_dedektifleri_data');
-            } catch(e) {}
+            updateSimStage();
         }
 
         function toggleEditMode() {
             isEditMode = !isEditMode;
             const btn = document.getElementById('btn-toggle-edit');
-            const inputs = document.querySelectorAll('input, textarea, select');
+            const inputs = document.querySelectorAll('input, textarea');
 
-            inputs.forEach(el => {
-                if (el.type !== 'button') {
-                    el.disabled = !isEditMode;
-                    if (!isEditMode) {
-                        el.classList.add('bg-slate-100', 'cursor-not-allowed');
-                    } else {
-                        el.classList.remove('bg-slate-100', 'cursor-not-allowed');
-                    }
-                }
-            });
-
-            if (btn) {
-                if (isEditMode) {
-                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-md';
-                    btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> <span>Düzenleme Modu: AÇIK</span>';
-                } else {
-                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white shadow-md';
-                    btn.innerHTML = '<i class="fa-solid fa-lock"></i> <span>Gözlem Modu (Kilitli)</span>';
-                }
+            if (isEditMode) {
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i><span>Düzenleme Modu: AÇIK</span>';
+                if (btn) btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-md';
+                inputs.forEach(input => input.removeAttribute('readonly'));
+            } else {
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-lock"></i><span>Gözlem Modu: KİLİTLİ</span>';
+                if (btn) btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-amber-300 shadow-md';
+                inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
             }
         }
 
         function toggleAllSections() {
             isAllSectionsExpanded = !isAllSectionsExpanded;
-            const btnLabel = document.getElementById('label-toggle-all');
-            const sections = document.querySelectorAll('main section');
-
-            sections.forEach(sec => {
-                if (isAllSectionsExpanded) {
-                    sec.classList.remove('hidden');
-                } else {
-                    if (sec.id !== 'light-stage') sec.classList.toggle('hidden');
-                }
-            });
-
-            if (btnLabel) {
-                btnLabel.textContent = isAllSectionsExpanded ? 'Tüm Alanları Aç' : 'Daralt';
+            const label = document.getElementById('label-toggle-all');
+            if (label) {
+                label.textContent = isAllSectionsExpanded ? 'Tüm Alanları Aç' : 'Tüm Alanları Daralt';
             }
         }
 
-        function insertQuickTag(tagText) {
-            if (lastFocusedInput && !lastFocusedInput.disabled) {
-                if (lastFocusedInput.value) {
-                    lastFocusedInput.value += ' ' + tagText;
-                } else {
-                    lastFocusedInput.value = tagText;
-                }
-                autoSave();
-            } else {
-                const firstInput = document.getElementById('obs-normal');
-                if (firstInput && !firstInput.disabled) {
-                    firstInput.value = (firstInput.value ? firstInput.value + ' ' : '') + tagText;
-                    autoSave();
-                }
+        function insertQuickTag(text) {
+            if (!lastFocusedInput) {
+                lastFocusedInput = document.getElementById('obs-colored') || document.getElementById('obs-normal');
             }
+            if (lastFocusedInput) {
+                const currentVal = lastFocusedInput.value;
+                lastFocusedInput.value = currentVal ? `${currentVal}, ${text}` : text;
+                lastFocusedInput.focus();
+                saveFormData();
+            }
+        }
+
+        function updateSimulatedObjectText(val) {
+            const label = document.getElementById('sim-object-label');
+            if (label) label.textContent = val || 'Lego Parçası';
+            saveFormData();
         }
 
         function openCustomLegoModal() {
@@ -871,38 +826,32 @@
             const nameInput = document.getElementById('custom-lego-name');
             const colorInput = document.getElementById('custom-lego-color');
 
-            const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Özel Lego';
-            const color = (colorInput && colorInput.value) ? colorInput.value : '#10B981';
+            const name = nameInput?.value?.trim() || 'Özel Lego';
+            const color = colorInput?.value || '#10B981';
 
-            const key = 'custom_lego_' + Date.now();
-            simObjects[key] = { label: name, color: color };
+            const newKey = `custom_lego_${Date.now()}`;
+            simObjects[newKey] = { label: name, color: color };
 
+            // Dynamically inject preset button into toolbar
             const container = document.getElementById('lego-preset-container');
             if (container) {
                 const newBtn = document.createElement('button');
-                newBtn.onclick = () => selectSimObject(key);
+                newBtn.id = `preset-btn-${newKey}`;
+                newBtn.onclick = () => selectSimObject(newKey);
                 newBtn.className = 'px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5';
-                newBtn.title = name;
-                newBtn.innerHTML = `<span class="w-3 h-3 rounded-sm inline-block shadow" style="background-color: ${color}"></span> ${name.split(' ')[0]}`;
+                newBtn.innerHTML = `<span class="w-3 h-3 rounded-sm inline-block border border-slate-700" style="background-color: ${color}"></span> ${name.split(' ')[0]}`;
                 container.appendChild(newBtn);
             }
 
-            selectSimObject(key);
+            selectSimObject(newKey);
             closeCustomLegoModal();
-            if (nameInput) nameInput.value = '';
-        }
-
-        function resetLabDefaults() {
-            selectSimObject('yellow_lego');
-            setSimMode('normal');
         }
 
         function openCompletionBadgeModal() {
+            const name = document.getElementById('student-name')?.value?.trim() || 'Renk Dedektifi Öğrenci';
+            const nameSpan = document.getElementById('badge-student-name');
+            if (nameSpan) nameSpan.textContent = name;
             const modal = document.getElementById('badge-modal');
-            const nameEl = document.getElementById('badge-student-name');
-            const inputVal = document.getElementById('student-name')?.value;
-            
-            if (nameEl) nameEl.textContent = inputVal && inputVal.trim() !== '' ? inputVal : 'Öğrenci Dedektif';
             if (modal) modal.classList.remove('hidden');
         }
 
@@ -911,18 +860,63 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        function syncInputValuesForExport(container) {
-            container.querySelectorAll('input[type="text"]').forEach(input => {
+        function clearForm() {
+            formFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            localStorage.removeItem('renk_dedektifleri_data');
+            selectSimObject('yellow_lego');
+        }
+
+        function saveFormData() {
+            const data = {
+                currentSimObject,
+                currentMode,
+                currentAcetateColor
+            };
+            formFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+            ['comp-normal', 'comp-white', 'comp-colored'].forEach(name => {
+                const checked = document.querySelector(`input[name="${name}"]:checked`);
+                if (checked) data[name] = checked.value;
+            });
+
+            localStorage.setItem('renk_dedektifleri_data', JSON.stringify(data));
+        }
+
+        function loadFormData() {
+            try {
+                const saved = localStorage.getItem('renk_dedektifleri_data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    formFields.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && data[id] !== undefined) el.value = data[id];
+                    });
+                    ['comp-normal', 'comp-white', 'comp-colored'].forEach(name => {
+                        if (data[name]) {
+                            const radio = document.querySelector(`input[name="${name}"][value="${data[name]}"]`);
+                            if (radio) radio.checked = true;
+                        }
+                    });
+                    if (data.currentSimObject && simObjects[data.currentSimObject]) {
+                        currentSimObject = data.currentSimObject;
+                    }
+                }
+            } catch (e) {
+                console.warn('LocalStorage error:', e);
+            }
+        }
+
+        function syncInputValuesForExport(cardElement) {
+            cardElement.querySelectorAll('input[type="text"], textarea').forEach(input => {
                 input.setAttribute('value', input.value);
-            });
-            container.querySelectorAll('textarea').forEach(textarea => {
-                textarea.textContent = textarea.value;
-            });
-            container.querySelectorAll('input[type="radio"]').forEach(radio => {
-                if (radio.checked) {
-                    radio.setAttribute('checked', 'checked');
-                } else {
-                    radio.removeAttribute('checked');
+                if (input.tagName.toLowerCase() === 'textarea') {
+                    input.textContent = input.value;
                 }
             });
         }
@@ -931,14 +925,13 @@
             const cardElement = document.querySelector('.print-card');
             if (!cardElement) return;
 
-            // Synchronize input element states so html2canvas renders typed text correctly
             syncInputValuesForExport(cardElement);
 
             const downloadBtn = document.getElementById('btn-download-pdf');
             const originalContent = downloadBtn ? downloadBtn.innerHTML : '';
             
             if (downloadBtn) {
-                downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PDF İndiriliyor...';
+                downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PDF Hazırlanıyor...';
                 downloadBtn.disabled = true;
             }
 
@@ -946,16 +939,15 @@
             const sanitizedName = studentName.replace(/[^a-zA-Z0-9_ğüşıöçĞÜŞİÖÇ]/g, '_');
             const fileName = `Renk_Dedektifleri_${sanitizedName}.pdf`;
 
-            // Configure html2pdf parameters
             const opt = {
-                margin:       [0.2, 0.2, 0.2, 0.2],
+                margin:       [0.15, 0.15, 0.15, 0.15],
                 filename:     fileName,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollY: 0 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            // Hide non-printable elements during PDF render
             const noPrintElements = document.querySelectorAll('.no-print');
             noPrintElements.forEach(el => el.style.display = 'none');
 
@@ -984,6 +976,87 @@
                 window.print();
             }
         }
+
+        function downloadImageSS() {
+            const cardElement = document.querySelector('.print-card');
+            if (!cardElement) return;
+
+            syncInputValuesForExport(cardElement);
+
+            const imgBtn = document.getElementById('btn-download-image');
+            const originalContent = imgBtn ? imgBtn.innerHTML : '';
+            if (imgBtn) {
+                imgBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SS Alınıyor...';
+                imgBtn.disabled = true;
+            }
+
+            const studentName = document.getElementById('student-name')?.value?.trim() || 'Ogrenci';
+            const sanitizedName = studentName.replace(/[^a-zA-Z0-9_ğüşıöçĞÜŞİÖÇ]/g, '_');
+            const fileName = `Renk_Dedektifleri_${sanitizedName}.png`;
+
+            const noPrintElements = document.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.style.display = 'none');
+
+            if (window.html2canvas) {
+                html2canvas(cardElement, { scale: 2, useCORS: true, logging: false }).then(canvas => {
+                    noPrintElements.forEach(el => el.style.display = '');
+                    
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+
+                    if (imgBtn) {
+                        imgBtn.innerHTML = originalContent;
+                        imgBtn.disabled = false;
+                    }
+                }).catch(err => {
+                    console.error('Image capture error:', err);
+                    noPrintElements.forEach(el => el.style.display = '');
+                    if (imgBtn) {
+                        imgBtn.innerHTML = originalContent;
+                        imgBtn.disabled = false;
+                    }
+                    window.print();
+                });
+            } else {
+                noPrintElements.forEach(el => el.style.display = '');
+                if (imgBtn) {
+                    imgBtn.innerHTML = originalContent;
+                    imgBtn.disabled = false;
+                }
+                window.print();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFormData();
+            
+            // Set current date if empty
+            const dateInput = document.getElementById('activity-date');
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().split('T')[0];
+            }
+
+            // Track last focused text element for Quick Tags
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+                el.addEventListener('focus', (e) => {
+                    lastFocusedInput = e.target;
+                });
+                el.addEventListener('input', saveFormData);
+            });
+
+            document.querySelectorAll('input[type="radio"]').forEach(r => {
+                r.addEventListener('change', saveFormData);
+            });
+
+            // Initial rendering of Lego stage
+            updateSimStage();
+        });
+
+        window.onload = function() {
+            updateSimStage();
+        };
     </script>
 </body>
 </html>

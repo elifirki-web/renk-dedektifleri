@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renk Dedektifleri - Tahminim, Gözlemim ve Kanıtım</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf Library for direct PDF exports -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* Printable area optimizations */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .print-card {
+                box-shadow: none !important;
+                border: 2px solid #000000 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 1.5rem !important;
+                page-break-inside: avoid;
+            }
+            input[type="text"], textarea {
+                border: none !important;
+                border-bottom: 1px solid #333 !important;
+                background: transparent !important;
+                padding: 2px !important;
+                resize: none !important;
+            }
+            .bg-indigo-900, .bg-slate-900, .bg-indigo-50 {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                border-color: #cbd5e1 !important;
+            }
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-3 sm:px-6 md:py-10">
+
+    <!-- MAIN WORKSHEET CONTAINER -->
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden print-card">
+        
+        <!-- Header Banner -->
+        <header class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-950 text-white p-6 md:p-8 relative">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-black tracking-wider uppercase mb-2 shadow">
+                        <i class="fa-solid fa-magnifying-glass"></i> BILFEN DİJİTAL ETKİNLİK KARTI
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white flex items-center gap-2">
+                        RENK DEDEKTİFLERİ
+                    </h1>
+                    <p class="text-indigo-200 text-xs sm:text-sm font-medium mt-1">
+                        Tahminim, Gözlemim ve Kanıtım Coding
+                    </p>
+                </div>
+                <!-- Bilfen Watermark Badge -->
+                <div class="flex items-center gap-3 self-end sm:self-center">
+                    <div class="text-right">
+                        <span class="block text-xl font-black tracking-widest text-amber-400">BILFEN</span>
+                        <span class="block text-[10px] text-indigo-300 font-semibold uppercase tracking-wider">Eğitim Kurumları</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 pt-3 border-t border-indigo-700/60 text-xs text-indigo-200 flex items-center gap-2 no-print">
+                <i class="fa-solid fa-info-circle text-amber-400"></i>
+                <span>Alanlara tıklayarak cevaplarını yaz. Tahminini denemeden önce kaydet.</span>
+            </div>
+        </header>
+
+        <!-- Student Information Bar -->
+        <div class="bg-indigo-50/70 p-4 md:p-6 border-b border-indigo-100">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="student-name" class="block text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-pen text-indigo-600"></i> Adım Soyadım:
+                    </label>
+                    <input type="text" id="student-name" placeholder="Adınızı ve soyadınızı yazınız..." class="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200 bg-white text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition">
+                </div>
+                <div>
+                    <label for="object-name" class="block text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-cube text-indigo-600"></i> İncelediğim Nesne:
+                    </label>
+                    <input type="text" id="object-name" placeholder="Örn: Sarı Lego Parçası" class="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200 bg-white text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition" oninput="updateSimulatedObjectText(this.value)">
+                </div>
+                <div>
+                    <label for="activity-date" class="block text-xs font-bold uppercase tracking-wider text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calendar-day text-indigo-600"></i> Tarih:
+                    </label>
+                    <input type="date" id="activity-date" class="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200 bg-white text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition">
+                </div>
+            </div>
+        </div>
+
+        <main class="p-4 md:p-8 space-y-8">
+
+            <!-- INTERACTIVE VIRTUAL LAB SIMULATOR -->
+            <section class="no-print bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-5 md:p-6 shadow-xl text-white">
+                <!-- Simulator Top Toolbar -->
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-indigo-900/80 p-3 rounded-xl border border-indigo-700/60 mb-5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Mod Seçimi:</span>
+                        <button id="btn-toggle-edit" onclick="toggleEditMode()" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-md">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <span>Düzenleme Modu: AÇIK</span>
+                        </button>
+                        <button onclick="toggleAllSections()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-800 hover:bg-indigo-700 text-indigo-100 border border-indigo-600 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-folder-open text-amber-400"></i>
+                            <span id="label-toggle-all">Tüm Alanları Aç</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="openCustomLegoModal()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-plus-circle"></i>
+                            Özel Lego Ekle
+                        </button>
+                        <button onclick="resetLabDefaults()" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="Sanal Deneyi Sıfırla">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 pb-3 border-b border-indigo-800/50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-xl shadow-lg">
+                            <i class="fa-solid fa-flask"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg md:text-xl font-extrabold text-amber-300">İnteraktif Sanal Deney Laboratuvarı</h2>
+                            <p class="text-xs text-indigo-200">Işık ve filtre efektlerini lego parçaları üzerinde deneyerek gözlem yap!</p>
+                        </div>
+                    </div>
+
+                    <!-- Lego Brick Preset Buttons Container -->
+                    <div class="flex flex-wrap items-center gap-2 bg-indigo-900/60 p-1.5 rounded-xl border border-indigo-700/50" id="lego-preset-container">
+                        <span class="text-xs font-semibold text-indigo-200 px-1">Lego Seç:</span>
+                        <button onclick="selectSimObject('yellow_lego')" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Sarı Lego Parçası">
+                            <span class="w-3 h-3 rounded-sm bg-amber-400 inline-block shadow"></span> Sarı
+                        </button>
+                        <button onclick="selectSimObject('red_lego')" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Kırmızı Lego Parçası">
+                            <span class="w-3 h-3 rounded-sm bg-red-500 inline-block shadow"></span> Kırmızı
+                        </button>
+                        <button onclick="selectSimObject('blue_lego')" class="px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5" title="Mavi Lego Parçası">
+                            <span class="w-3 h-3 rounded-sm bg-blue-500 inline-block shadow"></span> Mavi
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stage & Simulator Controls Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <!-- Visual Stage Container -->
+                    <div class="lg:col-span-7 flex flex-col items-center">
+                        <div id="light-stage" class="w-full h-60 md:h-72 rounded-2xl bg-slate-200 relative overflow-hidden flex items-center justify-center border-4 border-indigo-800/80 shadow-2xl transition-all">
+                            
+                            <!-- Light Beam Layer -->
+                            <div id="beam-layer" class="absolute inset-0 pointer-events-none transition-all duration-300"></div>
+
+                            <!-- Acetate Filter Overlay Layer -->
+                            <div id="filter-overlay-layer" class="absolute inset-0 pointer-events-none transition-all duration-300"></div>
+
+                            <!-- Stage Object Graphics -->
+                            <div id="stage-object-container" class="relative z-10 flex flex-col items-center justify-center p-6 text-center">
+                                <div id="stage-object" class="transform transition duration-500 flex items-center justify-center">
+                                    <!-- Dynamic SVG standard Lego rendering -->
+                                </div>
+                                <span id="sim-object-label" class="mt-3 px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-white backdrop-blur border border-white/20">
+                                    Sarı Lego Parçası
+                                </span>
+                            </div>
+
+                            <!-- Current Mode Badge -->
+                            <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30 font-semibold flex items-center gap-1.5 shadow">
+                                <i id="mode-icon" class="fa-solid fa-sun"></i>
+                                <span id="mode-label">Normal Sınıf Işığı</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simulator Control Panel -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <!-- Light Source Control Box -->
+                        <div class="bg-indigo-900/70 p-3.5 rounded-xl border border-indigo-700/50">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
+                                1. Işık Kaynağını Seç
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setSimMode('normal')" id="btn-mode-normal" class="p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md">
+                                    <i class="fa-solid fa-sun text-sm"></i>
+                                    <span>Normal Işık</span>
+                                </button>
+                                <button onclick="setSimMode('white')" id="btn-mode-white" class="p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800">
+                                    <i class="fa-solid fa-flashlight text-sm"></i>
+                                    <span>Beyaz Fener</span>
+                                </button>
+                                <button onclick="setSimMode('colored')" id="btn-mode-colored" class="p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800">
+                                    <i class="fa-solid fa-filter text-sm"></i>
+                                    <span>Renkli Asetat</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Acetate Filter Selector Box -->
+                        <div id="acetate-controls" class="bg-indigo-900/70 p-3.5 rounded-xl border border-indigo-700/50 transition duration-300 opacity-40 pointer-events-none">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
+                                2. Asetat Filtre Rengi
+                            </label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="setAcetateColor('red')" id="btn-filter-red" class="p-2 rounded-lg text-xs font-bold border-2 border-red-500 bg-red-600/30 text-white transition flex flex-col items-center justify-center gap-1">
+                                    <span class="w-3 h-3 rounded-full bg-red-500"></span> Kırmızı
+                                </button>
+                                <button onclick="setAcetateColor('blue')" id="btn-filter-blue" class="p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500"></span> Mavi
+                                </button>
+                                <button onclick="setAcetateColor('green')" id="btn-filter-green" class="p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1">
+                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Yeşil
+                                </button>
+                                <button onclick="setAcetateColor('yellow')" id="btn-filter-yellow" class="p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1">
+                                    <span class="w-3 h-3 rounded-full bg-amber-400"></span> Sarı
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUICK ANSWER HELPER TOOLBAR -->
+            <div class="no-print bg-indigo-50 border border-indigo-200 rounded-2xl p-4 shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Hızlı Yanıt Etiketleri (Gözlem Kutusuna Ekle)
+                    </span>
+                    <span class="text-[11px] text-indigo-600 font-medium">Odaklandığın metin kutusuna doğrudan ekler</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="insertQuickTag('Sarı görünüyor')" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-semibold rounded-lg border border-amber-300 transition">🟡 Sarı</button>
+                    <button onclick="insertQuickTag('Kırmızı görünüyor')" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-900 text-xs font-semibold rounded-lg border border-red-300 transition">🔴 Kırmızı</button>
+                    <button onclick="insertQuickTag('Mavi görünüyor')" class="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-900 text-xs font-semibold rounded-lg border border-blue-300 transition">🔵 Mavi</button>
+                    <button onclick="insertQuickTag('Yeşil/Koyu görünüyor')" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-semibold rounded-lg border border-emerald-300 transition">🟢 Yeşil/Koyu</button>
+                    <button onclick="insertQuickTag('Siyah / Gölgede kaldı')" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-lg border border-slate-400 transition">⬛ Siyah / Koyu</button>
+                    <button onclick="insertQuickTag('Rengi aynı kaldı')" class="px-2.5 py-1 bg-teal-100 hover:bg-teal-200 text-teal-900 text-xs font-semibold rounded-lg border border-teal-300 transition">✅ Rengi Aynı Kaldı</button>
+                    <button onclick="insertQuickTag('Rengi farklılaştı')" class="px-2.5 py-1 bg-purple-100 hover:bg-purple-200 text-purple-900 text-xs font-semibold rounded-lg border border-purple-300 transition">🔄 Rengi Farklılaştı</button>
+                </div>
+            </div>
+
+            <!-- WORKSHEET SECTION 1: TAHMİNLERİM -->
+            <section class="space-y-3">
+                <div class="flex items-center gap-2 border-b-2 border-indigo-600 pb-2">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow">1</span>
+                    <h2 class="text-lg font-bold text-slate-900">Tahminlerim</h2>
+                </div>
+                <p class="text-xs text-slate-600 font-medium">Her ışık ortamında nesnenin nasıl görüneceğini denemeden önce yaz.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <label for="pred-normal" class="block text-xs font-bold text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-sun text-amber-500"></i> Normal sınıf ışığı
+                        </label>
+                        <input type="text" id="pred-normal" placeholder="Tahmininizi yazın..." class="w-full px-3 py-2 bg-white rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <label for="pred-white" class="block text-xs font-bold text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-flashlight text-indigo-600"></i> Beyaz ışık (fener ışığı)
+                        </label>
+                        <input type="text" id="pred-white" placeholder="Tahmininizi yazın..." class="w-full px-3 py-2 bg-white rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <label for="pred-colored" class="block text-xs font-bold text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-filter text-indigo-600"></i> Renkli ışık (asetattan geçen)
+                        </label>
+                        <input type="text" id="pred-colored" placeholder="Tahmininizi yazın..." class="w-full px-3 py-2 bg-white rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSHEET SECTION 2: GÖZLEMLERİM -->
+            <section class="space-y-3">
+                <div class="flex items-center gap-2 border-b-2 border-indigo-600 pb-2">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow">2</span>
+                    <h2 class="text-lg font-bold text-slate-900">Gözlemlerim</h2>
+                </div>
+                <p class="text-xs text-slate-600 font-medium">Aynı nesneyi üç ortamda incele. Gördüğün rengi ve tonunu yaz.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                    <div class="bg-amber-50/50 p-3.5 rounded-xl border border-amber-200">
+                        <label for="obs-normal" class="block text-xs font-bold text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye text-indigo-600"></i> Normal sınıf ışığı
+                        </label>
+                        <input type="text" id="obs-normal" placeholder="Gözleminizi yazın..." class="w-full px-3 py-2 bg-white rounded-lg border border-amber-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-200">
+                        <label for="obs-white" class="block text-xs font-bold text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye text-indigo-600"></i> Beyaz ışık (fener ışığı)
+                        </label>
+                        <input type="text" id="obs-white" placeholder="Gözleminizi yazın..." class="w-full px-3 py-2 bg-white rounded-lg border border-indigo-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+
+                    <div class="bg-purple-50/50 p-3.5 rounded-xl border border-purple-200">
+                        <label for="obs-colored" class="block text-xs font-bold text-indigo-900 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye text-indigo-600"></i> Renkli ışık (asetattan geçen)
+                        </label>
+                        <input type="text" id="obs-colored" placeholder="Gözleminizi yazın..." class="w-full px-3 py-2 bg-white rounded-lg border border-purple-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSHEET SECTION 3: TAHMİNLERİMLE KARŞILAŞTIRIYORUM -->
+            <section class="space-y-3">
+                <div class="flex items-center gap-2 border-b-2 border-indigo-600 pb-2">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow">3</span>
+                    <h2 class="text-lg font-bold text-slate-900">Tahminlerimle Karşılaştırıyorum</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                    <!-- Normal Light Compare -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-col justify-between">
+                        <span class="text-xs font-bold text-indigo-900 mb-2 block">Normal ışık</span>
+                        <div class="flex items-center gap-4">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="comp-normal" value="ayniydi" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-xs font-semibold text-slate-700">Aynıydı</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="comp-normal" value="farkliydi" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-xs font-semibold text-slate-700">Farklıydı</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- White Light Compare -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-col justify-between">
+                        <span class="text-xs font-bold text-indigo-900 mb-2 block">Beyaz ışık</span>
+                        <div class="flex items-center gap-4">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="comp-white" value="ayniydi" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-xs font-semibold text-slate-700">Aynıydı</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="comp-white" value="farkliydi" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-xs font-semibold text-slate-700">Farklıydı</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Colored Light Compare -->
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex flex-col justify-between">
+                        <span class="text-xs font-bold text-indigo-900 mb-2 block">Renkli ışık</span>
+                        <div class="flex items-center gap-4">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="comp-colored" value="ayniydi" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-xs font-semibold text-slate-700">Aynıydı</span>
+                            </label>
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="comp-colored" value="farkliydi" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-xs font-semibold text-slate-700">Farklıydı</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSHEET SECTION 4: KANITIM -->
+            <section class="space-y-3">
+                <div class="flex items-center gap-2 border-b-2 border-indigo-600 pb-2">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow">4</span>
+                    <h2 class="text-lg font-bold text-slate-900">Kanıtım</h2>
+                </div>
+                <p class="text-xs text-slate-600 font-medium">İki ışık ortamında ne gördüğünü yaz.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <label for="proof-normal" class="block text-xs font-bold text-indigo-900">
+                            Aynı nesne normal ışıkta...
+                        </label>
+                        <textarea id="proof-normal" rows="3" placeholder="Normal ışıkta gördüklerinizi kanıt olarak detaylandırın..." class="w-full p-3 bg-white rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <label for="proof-colored" class="block text-xs font-bold text-indigo-900">
+                            Renkli ışıkta ise...
+                        </label>
+                        <textarea id="proof-colored" rows="3" placeholder="Renkli ışık altında nesnenin görünüş değişimini kanıt olarak yazın..." class="w-full p-3 bg-white rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WORKSHEET SECTION 5: AÇIKLAMAM -->
+            <section class="space-y-3">
+                <div class="flex items-center gap-2 border-b-2 border-indigo-600 pb-2">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow">5</span>
+                    <h2 class="text-lg font-bold text-slate-900">Açıklamam</h2>
+                </div>
+
+                <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-200 space-y-2">
+                    <label for="explanation" class="block text-xs font-bold text-indigo-950">
+                        Nesne aynı kaldı ama görünüşü değişti, çünkü...
+                    </label>
+                    <textarea id="explanation" rows="4" placeholder="Işığın nesneler üzerindeki yansıma ve filtreleme bilimsel açıklamasını yazınız..." class="w-full p-3.5 bg-white rounded-xl border border-indigo-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    
+                    <div class="flex items-center gap-2 text-[11px] text-indigo-700 font-medium italic pt-1">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span>Fark görmediysen bunu yaz; açıklamanı kendi gözlemine dayandır.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACTION BUTTONS BAR -->
+            <div class="pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4 no-print">
+                <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <span id="save-status" class="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">
+                        <i class="fa-solid fa-circle-check"></i> Otomatik Kaydedildi
+                    </span>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="clearForm()" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-100 transition flex items-center gap-2">
+                        <i class="fa-solid fa-trash-can"></i> Temizle
+                    </button>
+                    <button onclick="openCompletionBadgeModal()" class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-award text-base"></i> Rozet Al
+                    </button>
+                    
+                    <!-- Direct PDF Download Button -->
+                    <button id="btn-download-pdf" onclick="downloadPDF()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-file-pdf text-base"></i> PDF İndir
+                    </button>
+                    
+                    <!-- Print Fallback Button -->
+                    <button onclick="window.print()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-print"></i> Yazdır
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slate-100 p-4 text-center border-t border-slate-200 text-xs text-slate-500 font-medium">
+            Tamamladığın kartı kaydet ve öğretmeninin yönergesine göre teslim et. | <strong class="text-slate-700">BILFEN EĞİTİM KURUMLARI</strong>
+        </footer>
+    </div>
+
+    <!-- CUSTOM LEGO CREATOR MODAL -->
+    <div id="custom-lego-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 transform transition-all">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-indigo-600"></i> Özel Lego Parçası Ekle
+                </h3>
+                <button onclick="closeCustomLegoModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="custom-lego-name" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Lego Adı</label>
+                    <input type="text" id="custom-lego-name" placeholder="Örn: Turuncu Lego Parçası" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label for="custom-lego-color" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Lego Rengi Seç</label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="custom-lego-color" value="#10B981" class="w-12 h-10 rounded-lg cursor-pointer border border-slate-300 p-1">
+                        <span class="text-xs text-slate-500 font-medium">İstediğin özel renkte Lego tasarla!</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+                    <button onclick="closeCustomLegoModal()" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition">İptal</button>
+                    <button onclick="saveCustomLegoBrick()" class="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow transition">Ekle ve Deneyde Kullan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLETION BADGE MODAL -->
+    <div id="badge-modal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-amber-300 relative overflow-hidden">
+            <div class="w-20 h-20 mx-auto mb-3 bg-gradient-to-tr from-amber-400 to-amber-200 rounded-full flex items-center justify-center text-4xl shadow-xl text-slate-950">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900">Tebrikler Dedektif!</h3>
+            <p id="badge-student-name" class="text-sm font-bold text-indigo-600 my-1">Öğrenci</p>
+            <p class="text-xs text-slate-600 mb-4">Renk Dedektifleri deneyini başarıyla tamamladın!</p>
+
+            <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900 font-semibold mb-5">
+                🎓 Bilfen Renk ve Işık Kodlama Uzmanı
+            </div>
+
+            <button onclick="closeCompletionBadgeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition">
+                Harika! Kapat
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let currentMode = 'normal'; // 'normal', 'white', 'colored'
+        let currentAcetateColor = 'red'; // 'red', 'blue', 'green', 'yellow'
+        let currentSimObject = 'yellow_lego';
+        let isEditMode = true;
+        let isAllSectionsExpanded = true;
+        let lastFocusedInput = null;
+
+        // Dynamic 3D Lego Brick SVG Graphic Generator
+        function getLegoSvg(colorHex) {
+            return `
+                <svg width="140" height="110" viewBox="0 0 130 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl transition-all duration-300">
+                    <!-- Shadow Base -->
+                    <rect x="15" y="42" width="100" height="50" rx="8" fill="black" fill-opacity="0.25" />
+                    <!-- Brick Main Body -->
+                    <rect x="15" y="38" width="100" height="50" rx="8" fill="${colorHex}" />
+                    <!-- Top Highlight Strip -->
+                    <rect x="17" y="40" width="96" height="6" rx="3" fill="white" fill-opacity="0.35" />
+                    
+                    <!-- Left Stud -->
+                    <rect x="28" y="22" width="32" height="18" rx="4" fill="${colorHex}" />
+                    <ellipse cx="44" cy="24" rx="14" ry="4" fill="white" fill-opacity="0.4" />
+                    <rect x="28" y="36" width="32" height="4" fill="black" fill-opacity="0.2" />
+                    
+                    <!-- Right Stud -->
+                    <rect x="70" y="22" width="32" height="18" rx="4" fill="${colorHex}" />
+                    <ellipse cx="86" cy="24" rx="14" ry="4" fill="white" fill-opacity="0.4" />
+                    <rect x="70" y="36" width="32" height="4" fill="black" fill-opacity="0.2" />
+                </svg>
+            `;
+        }
+
+        const simObjects = {
+            yellow_lego: { label: 'Sarı Lego Parçası', color: '#F59E0B' },
+            red_lego: { label: 'Kırmızı Lego Parçası', color: '#EF4444' },
+            blue_lego: { label: 'Mavi Lego Parçası', color: '#3B82F6' }
+        };
+
+        const formFields = [
+            'student-name', 'object-name', 'activity-date',
+            'pred-normal', 'pred-white', 'pred-colored',
+            'obs-normal', 'obs-white', 'obs-colored',
+            'proof-normal', 'proof-colored', 'explanation'
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Track focused text inputs for quick tags
+            document.querySelectorAll('input[type="text"], textarea').forEach(input => {
+                input.addEventListener('focus', () => {
+                    lastFocusedInput = input;
+                });
+            });
+
+            // Set default date to today safely
+            const dateInput = document.getElementById('activity-date');
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().split('T')[0];
+            }
+
+            // Load saved form data
+            loadFormData();
+
+            // Attach auto-save listeners safely
+            formFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', autoSave);
+                }
+            });
+
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', autoSave);
+            });
+
+            // Initialize default Lego object
+            selectSimObject('yellow_lego');
+        });
+
+        function selectSimObject(objKey) {
+            if (simObjects[objKey]) {
+                currentSimObject = objKey;
+                const stageObj = document.getElementById('stage-object');
+                const label = document.getElementById('sim-object-label');
+                
+                if (stageObj) stageObj.innerHTML = getLegoSvg(simObjects[objKey].color);
+                if (label) label.textContent = simObjects[objKey].label;
+
+                const objectInput = document.getElementById('object-name');
+                if (objectInput && (!objectInput.value || objectInput.value.includes('Lego'))) {
+                    objectInput.value = simObjects[objKey].label;
+                    autoSave();
+                }
+                updateSimStage();
+            }
+        }
+
+        function updateSimulatedObjectText(val) {
+            const label = document.getElementById('sim-object-label');
+            if (label) {
+                if (val && val.trim() !== '') {
+                    label.textContent = val;
+                } else if (simObjects[currentSimObject]) {
+                    label.textContent = simObjects[currentSimObject].label;
+                }
+            }
+        }
+
+        function setSimMode(mode) {
+            currentMode = mode;
+            
+            // Toggle Light Mode Buttons Styling
+            const btnNormal = document.getElementById('btn-mode-normal');
+            const btnWhite = document.getElementById('btn-mode-white');
+            const btnColored = document.getElementById('btn-mode-colored');
+
+            [btnNormal, btnWhite, btnColored].forEach(btn => {
+                if (btn) {
+                    btn.className = 'p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-indigo-950 text-indigo-200 border border-indigo-700 hover:bg-indigo-800';
+                }
+            });
+
+            const activeBtn = mode === 'normal' ? btnNormal : (mode === 'white' ? btnWhite : btnColored);
+            if (activeBtn) {
+                activeBtn.className = 'p-2 rounded-lg text-xs font-bold transition flex flex-col items-center justify-center gap-1 bg-amber-500 text-slate-950 shadow-md';
+            }
+
+            // Acetate control panel visibility animation
+            const acetateControls = document.getElementById('acetate-controls');
+            if (acetateControls) {
+                if (mode === 'colored') {
+                    acetateControls.classList.remove('opacity-40', 'pointer-events-none');
+                } else {
+                    acetateControls.classList.add('opacity-40', 'pointer-events-none');
+                }
+            }
+
+            updateSimStage();
+        }
+
+        function setAcetateColor(color) {
+            currentAcetateColor = color;
+            const filterBtns = {
+                red: document.getElementById('btn-filter-red'),
+                blue: document.getElementById('btn-filter-blue'),
+                green: document.getElementById('btn-filter-green'),
+                yellow: document.getElementById('btn-filter-yellow')
+            };
+
+            Object.keys(filterBtns).forEach(k => {
+                if (filterBtns[k]) {
+                    filterBtns[k].className = 'p-2 rounded-lg text-xs font-bold border border-indigo-700 bg-indigo-950 text-indigo-300 transition flex flex-col items-center justify-center gap-1';
+                }
+            });
+
+            if (filterBtns[color]) {
+                const borderColors = { red: 'border-red-500 bg-red-600/30 text-white', blue: 'border-blue-500 bg-blue-600/30 text-white', green: 'border-emerald-500 bg-emerald-600/30 text-white', yellow: 'border-amber-400 bg-amber-500/30 text-white' };
+                filterBtns[color].className = `p-2 rounded-lg text-xs font-bold border-2 ${borderColors[color]} transition flex flex-col items-center justify-center gap-1`;
+            }
+
+            if (currentMode === 'colored') {
+                updateSimStage();
+            }
+        }
+
+        function updateSimStage() {
+            const stage = document.getElementById('light-stage');
+            const beamLayer = document.getElementById('beam-layer');
+            const filterOverlay = document.getElementById('filter-overlay-layer');
+            const modeIcon = document.getElementById('mode-icon');
+            const modeLabel = document.getElementById('mode-label');
+
+            if (!stage || !beamLayer || !filterOverlay) return;
+
+            // Base Stage background
+            if (currentMode === 'normal') {
+                stage.style.backgroundColor = '#e2e8f0'; // bright classroom
+                beamLayer.style.background = 'transparent';
+                filterOverlay.style.background = 'transparent';
+                if (modeIcon) modeIcon.className = 'fa-solid fa-sun text-amber-500';
+                if (modeLabel) modeLabel.textContent = 'Normal Sınıf Işığı';
+            } else if (currentMode === 'white') {
+                stage.style.backgroundColor = '#090d16'; // dark room
+                beamLayer.style.background = 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.2) 50%, transparent 80%)';
+                filterOverlay.style.background = 'transparent';
+                if (modeIcon) modeIcon.className = 'fa-solid fa-flashlight text-amber-300';
+                if (modeLabel) modeLabel.textContent = 'Beyaz Fener Işığı';
+            } else if (currentMode === 'colored') {
+                stage.style.backgroundColor = '#090d16'; // dark room with filter beam
+                const filterColors = {
+                    red: 'rgba(239, 68, 68, 0.65)',
+                    blue: 'rgba(59, 130, 246, 0.65)',
+                    green: 'rgba(16, 185, 129, 0.65)',
+                    yellow: 'rgba(245, 158, 11, 0.65)'
+                };
+                const filterNames = { red: 'Kırmızı', blue: 'Mavi', green: 'Yeşil', yellow: 'Sarı' };
+                beamLayer.style.background = `radial-gradient(circle, ${filterColors[currentAcetateColor]} 0%, rgba(255,255,255,0.15) 55%, transparent 80%)`;
+                filterOverlay.style.background = filterColors[currentAcetateColor];
+                filterOverlay.style.mixBlendMode = 'overlay';
+                if (modeIcon) modeIcon.className = 'fa-solid fa-filter text-amber-300';
+                if (modeLabel) modeLabel.textContent = `${filterNames[currentAcetateColor]} Asetat Filtreli Işık`;
+            }
+        }
+
+        function autoSave() {
+            const data = {};
+            formFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+
+            ['comp-normal', 'comp-white', 'comp-colored'].forEach(name => {
+                const checked = document.querySelector(`input[name="${name}"]:checked`);
+                if (checked) data[name] = checked.value;
+            });
+
+            try {
+                localStorage.setItem('renk_dedektifleri_data', JSON.stringify(data));
+                const saveStatus = document.getElementById('save-status');
+                if (saveStatus) {
+                    saveStatus.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i> Otomatik Kaydedildi';
+                }
+            } catch (e) {
+                console.error("Local storage error:", e);
+            }
+        }
+
+        function loadFormData() {
+            try {
+                const saved = localStorage.getItem('renk_dedektifleri_data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    formFields.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && data[id] !== undefined) el.value = data[id];
+                    });
+
+                    ['comp-normal', 'comp-white', 'comp-colored'].forEach(name => {
+                        if (data[name]) {
+                            const radio = document.querySelector(`input[name="${name}"][value="${data[name]}"]`);
+                            if (radio) radio.checked = true;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to load saved data:", e);
+            }
+        }
+
+        function clearForm() {
+            formFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            try {
+                localStorage.removeItem('renk_dedektifleri_data');
+            } catch(e) {}
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('btn-toggle-edit');
+            const inputs = document.querySelectorAll('input, textarea, select');
+
+            inputs.forEach(el => {
+                if (el.type !== 'button') {
+                    el.disabled = !isEditMode;
+                    if (!isEditMode) {
+                        el.classList.add('bg-slate-100', 'cursor-not-allowed');
+                    } else {
+                        el.classList.remove('bg-slate-100', 'cursor-not-allowed');
+                    }
+                }
+            });
+
+            if (btn) {
+                if (isEditMode) {
+                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white shadow-md';
+                    btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> <span>Düzenleme Modu: AÇIK</span>';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white shadow-md';
+                    btn.innerHTML = '<i class="fa-solid fa-lock"></i> <span>Gözlem Modu (Kilitli)</span>';
+                }
+            }
+        }
+
+        function toggleAllSections() {
+            isAllSectionsExpanded = !isAllSectionsExpanded;
+            const btnLabel = document.getElementById('label-toggle-all');
+            const sections = document.querySelectorAll('main section');
+
+            sections.forEach(sec => {
+                if (isAllSectionsExpanded) {
+                    sec.classList.remove('hidden');
+                } else {
+                    if (sec.id !== 'light-stage') sec.classList.toggle('hidden');
+                }
+            });
+
+            if (btnLabel) {
+                btnLabel.textContent = isAllSectionsExpanded ? 'Tüm Alanları Aç' : 'Daralt';
+            }
+        }
+
+        function insertQuickTag(tagText) {
+            if (lastFocusedInput && !lastFocusedInput.disabled) {
+                if (lastFocusedInput.value) {
+                    lastFocusedInput.value += ' ' + tagText;
+                } else {
+                    lastFocusedInput.value = tagText;
+                }
+                autoSave();
+            } else {
+                const firstInput = document.getElementById('obs-normal');
+                if (firstInput && !firstInput.disabled) {
+                    firstInput.value = (firstInput.value ? firstInput.value + ' ' : '') + tagText;
+                    autoSave();
+                }
+            }
+        }
+
+        function openCustomLegoModal() {
+            const modal = document.getElementById('custom-lego-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeCustomLegoModal() {
+            const modal = document.getElementById('custom-lego-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function saveCustomLegoBrick() {
+            const nameInput = document.getElementById('custom-lego-name');
+            const colorInput = document.getElementById('custom-lego-color');
+
+            const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Özel Lego';
+            const color = (colorInput && colorInput.value) ? colorInput.value : '#10B981';
+
+            const key = 'custom_lego_' + Date.now();
+            simObjects[key] = { label: name, color: color };
+
+            const container = document.getElementById('lego-preset-container');
+            if (container) {
+                const newBtn = document.createElement('button');
+                newBtn.onclick = () => selectSimObject(key);
+                newBtn.className = 'px-2.5 py-1 text-xs rounded-lg bg-indigo-800 hover:bg-indigo-700 text-white font-medium border border-indigo-600 transition flex items-center gap-1.5';
+                newBtn.title = name;
+                newBtn.innerHTML = `<span class="w-3 h-3 rounded-sm inline-block shadow" style="background-color: ${color}"></span> ${name.split(' ')[0]}`;
+                container.appendChild(newBtn);
+            }
+
+            selectSimObject(key);
+            closeCustomLegoModal();
+            if (nameInput) nameInput.value = '';
+        }
+
+        function resetLabDefaults() {
+            selectSimObject('yellow_lego');
+            setSimMode('normal');
+        }
+
+        function openCompletionBadgeModal() {
+            const modal = document.getElementById('badge-modal');
+            const nameEl = document.getElementById('badge-student-name');
+            const inputVal = document.getElementById('student-name')?.value;
+            
+            if (nameEl) nameEl.textContent = inputVal && inputVal.trim() !== '' ? inputVal : 'Öğrenci Dedektif';
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeCompletionBadgeModal() {
+            const modal = document.getElementById('badge-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function syncInputValuesForExport(container) {
+            container.querySelectorAll('input[type="text"]').forEach(input => {
+                input.setAttribute('value', input.value);
+            });
+            container.querySelectorAll('textarea').forEach(textarea => {
+                textarea.textContent = textarea.value;
+            });
+            container.querySelectorAll('input[type="radio"]').forEach(radio => {
+                if (radio.checked) {
+                    radio.setAttribute('checked', 'checked');
+                } else {
+                    radio.removeAttribute('checked');
+                }
+            });
+        }
+
+        function downloadPDF() {
+            const cardElement = document.querySelector('.print-card');
+            if (!cardElement) return;
+
+            // Synchronize input element states so html2canvas renders typed text correctly
+            syncInputValuesForExport(cardElement);
+
+            const downloadBtn = document.getElementById('btn-download-pdf');
+            const originalContent = downloadBtn ? downloadBtn.innerHTML : '';
+            
+            if (downloadBtn) {
+                downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PDF İndiriliyor...';
+                downloadBtn.disabled = true;
+            }
+
+            const studentName = document.getElementById('student-name')?.value?.trim() || 'Ogrenci';
+            const sanitizedName = studentName.replace(/[^a-zA-Z0-9_ğüşıöçĞÜŞİÖÇ]/g, '_');
+            const fileName = `Renk_Dedektifleri_${sanitizedName}.pdf`;
+
+            // Configure html2pdf parameters
+            const opt = {
+                margin:       [0.2, 0.2, 0.2, 0.2],
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Hide non-printable elements during PDF render
+            const noPrintElements = document.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.style.display = 'none');
+
+            if (window.html2pdf) {
+                html2pdf().set(opt).from(cardElement).save().then(() => {
+                    noPrintElements.forEach(el => el.style.display = '');
+                    if (downloadBtn) {
+                        downloadBtn.innerHTML = originalContent;
+                        downloadBtn.disabled = false;
+                    }
+                }).catch(err => {
+                    console.error('PDF export error:', err);
+                    noPrintElements.forEach(el => el.style.display = '');
+                    if (downloadBtn) {
+                        downloadBtn.innerHTML = originalContent;
+                        downloadBtn.disabled = false;
+                    }
+                    window.print();
+                });
+            } else {
+                noPrintElements.forEach(el => el.style.display = '');
+                if (downloadBtn) {
+                    downloadBtn.innerHTML = originalContent;
+                    downloadBtn.disabled = false;
+                }
+                window.print();
+            }
+        }
+    </script>
+</body>
+</html>
